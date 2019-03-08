@@ -14,8 +14,17 @@
         <i-col span="4" style="text-align: left">
           <span class="detail-key">{{ datasetDetail.dataType }}</span>
         </i-col>
-        <i-col span="4" style="text-align: center">
+        <i-col
+          span="4"
+          style="text-align: center"
+          v-if="datasetDetail.dataSource==='kmx'">
           <span class="detail-key">数据类型：</span>
+        </i-col>
+        <i-col
+          span="4"
+          style="text-align: center"
+          v-else-if="datasetDetail.dataSource==='hdfs'">
+          <span class="detail-key">数据文件路径：</span>
         </i-col>
         <i-col span="4" style="text-align: left">
           <span class="detail-key">{{ dataCategory }}</span>
@@ -112,11 +121,15 @@ export default {
 			}
 		},
 		dataCategory () {
-			if (this.datasetDetail != null && this.datasetDetail.stmtTable != null) {
-				return this.datasetDetail.stmtTable
-			} else {
-				return ''
+			var sourceData = ''
+			if (this.datasetDetail != null) {
+				if (this.datasetDetail.dataSource === 'kmx' && this.datasetDetail.stmtTable != null) {
+					sourceData = this.datasetDetail.stmtTable
+				} else if (this.datasetDetail.dataSource === 'hdfs') {
+					sourceData = this.datasetDetail.hdfsPath
+				}
 			}
+			return sourceData
 		}
 	},
 	mounted () {
